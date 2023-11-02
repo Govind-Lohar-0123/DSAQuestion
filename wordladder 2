@@ -1,0 +1,60 @@
+
+//User function Template for Java
+class Solution {
+      Queue<ArrayList<String>> q=new LinkedList<>();
+    HashMap<String,Integer> map=new HashMap<>();
+    ArrayList<String> used=new ArrayList<>();
+    ArrayList<ArrayList<String>> ans=new ArrayList<>();
+    
+    // Function to find all sequences from startWord to targetWord using wordList
+    public ArrayList<ArrayList<String>> findSequences(String start, String end, String[] wordList) {
+        // Create a set to store the wordList for fast lookup
+           for(int i=0;i<wordList.length;i++)
+            map.put(wordList[i],0);
+
+            
+            q.add(new ArrayList<String>(List.of(start)));
+          map.remove(start);
+       
+        
+           while(q.size()!=0){
+            int size=q.size();
+            for(String use : used)
+                map.remove(use);
+            used.clear();
+            while(size-->0){
+                
+                ArrayList<String> temp=q.remove();
+                String s=temp.get(temp.size()-1);
+                if(s.equals(end))
+                   ans.add(temp);
+               
+                else strChange(temp);
+            }
+        }
+        
+        return ans;
+    }
+
+
+     void strChange(List<String> p){
+        String str=p.get(p.size()-1);
+
+        for(int i=0;i<str.length();i++){
+           char []ch=str.toCharArray();
+           for(char j='a'; j<='z'; j++){
+               ch[i]=j;
+               String s=String.valueOf(ch);
+            
+               if(map.containsKey(s))
+               {  p.add(s);
+                ArrayList<String> temp=new ArrayList<>(p);
+                  q.add(temp);
+                  p.remove(temp.size()-1);
+                  used.add(s);
+               
+               }
+           }
+        }
+    }
+}
