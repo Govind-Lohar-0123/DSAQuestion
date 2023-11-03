@@ -1,0 +1,62 @@
+
+class Solution
+{ int dp[][]=null;
+    // using loop
+
+    public int MinCoin(int[] nums, int amount)
+    {   dp=new int[nums.length+1][amount+1]
+        
+        for(int i=0;i<nums.length+1;i++){
+            for(int j=0;j<amount+1;j++){
+                if(i==0)dp[i][j]=Integer.MAX_VALUE-1;
+                if(j==0)dp[i][j]=0;
+               
+            }
+        }
+        
+        //CAN USE OR NOT 
+        
+        // for(int i=1;i<amount+1;i++){
+        //     if(i%nums[0]==0)
+        //         dp[1][i]=1;
+        //     else dp[1][i]=Integer.MAX_VALUE-1;
+        // }
+        
+        for(int i=1;i<nums.length+1;i++){
+            for(int j=1;j<amount+1;j++){
+                if(nums[i-1]<=j)
+                    dp[i][j]=Math.min(dp[i][j-nums[i-1]]+1,dp[i-1][j]);
+                else dp[i][j]=dp[i-1][j];
+            }
+        }
+        
+        if(dp[nums.length][amount]==Integer.MAX_VALUE-1)return -1;
+        return dp[nums.length][amount];
+    }
+    
+    // using memoazation
+    public int MinCoin(int[] nums, int amount)
+    {   dp=new int[nums.length+1][amount+1];
+        for(int i=0;i<nums.length+1;i++){
+            for(int j=0;j<amount+1;j++){
+                dp[i][j]=-1;
+            }
+        }
+        rec(nums,nums.length,amount);
+      
+        if(dp[nums.length][amount]==Integer.MAX_VALUE-1)return -1;
+        return dp[nums.length][amount]-1;
+    }
+    
+    int rec(int nums[],int n,int amt){
+        if(n==0 && amt==0)return 1;
+        if(n==0 && amt!=0)return Integer.MAX_VALUE-1;
+        if(dp[n][amt]!=-1)return dp[n][amt];
+        if(nums[n-1]<=amt)
+            return dp[n][amt]=Math.min(rec(nums,n,amt-nums[n-1])+1,rec(nums,n-1,amt));
+        else return dp[n][amt]=rec(nums,n-1,amt);
+    }
+    
+    
+    
+}
